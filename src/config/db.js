@@ -9,11 +9,14 @@ function initDatabase(callback) {
   });
 
   connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``, (err) => {
-    if (err)
+    if (err){
+        console.log("create_error\n");
         return callback(err);
+    }
     connection.changeUser({ database: process.env.DB_NAME }, (err) => {
-        if (err)
+        if (err){
             return callback(err);
+        }
         const createLogsTable = `
             CREATE TABLE IF NOT EXISTS logs (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,9 +29,27 @@ function initDatabase(callback) {
         connection.query(createLogsTable, (err) => {
             if (err)
                 return callback(err);
-            console.log("PASS TABLE");
+            console.log("PASS TABLE LOG");
             callback(null, connection);
         });
+        const createTodoTable = `
+            CREATE TABLE IF NOT EXISTS todo (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(100) NOT NULL,
+            description VARCHAR(100) NOT NULL,
+            created_at DATETIME NOT NULL,
+            due_time DATETIME NOT NULL, 
+            status enum('not strated', 'to do', 'in progress', 'done') NOT NULL,
+            user_id INT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES logs(id)
+        )`;
+        connection.query(createTodoTable, (err) => {
+        if (err)
+            return callback(err);
+        console.log("PASS TABLE TO DO0");
+        callback(null, connection);
+    });
+
     });
   });
 }
