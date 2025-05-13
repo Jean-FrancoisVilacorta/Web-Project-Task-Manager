@@ -1,6 +1,45 @@
 const mysql = require("mysql2");
 require("dotenv").config();
 
+
+function create_logs(callback, connection) {
+    const createLogsTable = `
+        CREATE TABLE IF NOT EXISTS logs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(100) NOT NULL,
+        password VARCHAR(100) NOT NULL,
+        last_name VARCHAR(100) NOT NULL,
+        first_name VARCHAR(100) NOT NULL,
+        day_time VARCHAR(100) NOT NULL
+        )`;
+    connection.query(createLogsTable, (err) => {
+        if (err)
+            return callback(err);
+        console.log("PASS TABLE LOG");
+        callback(null, connection);
+    });
+}
+
+function create_todo(callback, connection) {
+    const createTodoTable = `
+        CREATE TABLE IF NOT EXISTS todo (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(100) NOT NULL,
+        description VARCHAR(100) NOT NULL,
+        created_at DATETIME NOT NULL,
+        due_time DATETIME NOT NULL, 
+        status enum('not strated', 'to do', 'in progress', 'done') NOT NULL,
+        user_id INT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES logs(id)
+        )`;
+    connection.query(createTodoTable, (err) => {
+    if (err)
+        return callback(err);
+    console.log("PASS TABLE TO DO0");
+    callback(null, connection);
+    });
+}
+
 function initDatabase(callback) {
   const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -17,39 +56,8 @@ function initDatabase(callback) {
         if (err){
             return callback(err);
         }
-        const createLogsTable = `
-            CREATE TABLE IF NOT EXISTS logs (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                email VARCHAR(100) NOT NULL,
-                password VARCHAR(100) NOT NULL,
-                last_name VARCHAR(100) NOT NULL,
-                first_name VARCHAR(100) NOT NULL,
-                day_time VARCHAR(100) NOT NULL
-            )`;
-        connection.query(createLogsTable, (err) => {
-            if (err)
-                return callback(err);
-            console.log("PASS TABLE LOG");
-            callback(null, connection);
-        });
-        const createTodoTable = `
-            CREATE TABLE IF NOT EXISTS todo (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(100) NOT NULL,
-            description VARCHAR(100) NOT NULL,
-            created_at DATETIME NOT NULL,
-            due_time DATETIME NOT NULL, 
-            status enum('not strated', 'to do', 'in progress', 'done') NOT NULL,
-            user_id INT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES logs(id)
-        )`;
-        connection.query(createTodoTable, (err) => {
-        if (err)
-            return callback(err);
-        console.log("PASS TABLE TO DO0");
-        callback(null, connection);
-    });
-
+        create_logs(callback, connection);
+        create_todo(callback, connection);
     });
   });
 }

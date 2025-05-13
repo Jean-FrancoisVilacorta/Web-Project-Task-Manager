@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 initDatabase((err, db) => {
     if (err) {
-        console.error("OH NO! CALL THE POLLICE, THE CODE IS GOINNG TO EXPLOTE!", err);
+        console.error("OH NO! CALL THE POLLICE, THE CODE IS GOINNG TO EXPLOTE!\n", err);
         process.exit(84);
     }
 
@@ -29,7 +29,6 @@ initDatabase((err, db) => {
     app.post('/register', (req, res) => {
         post_register(req, res)
 });
-
     app.listen(port, () => {
         console.log(`server: http://localhost:${port}`);
     });
