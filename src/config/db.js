@@ -28,7 +28,7 @@ function create_todo(callback, connection) {
         description VARCHAR(100) NOT NULL,
         created_at DATETIME NOT NULL,
         due_time DATETIME NOT NULL, 
-        status enum('not strated', 'to do', 'in progress', 'done') NOT NULL,
+        status enum('not started', 'to do', 'in progress', 'done') NOT NULL,
         user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES logs(id)
         )`;
@@ -62,4 +62,12 @@ function initDatabase(callback) {
   });
 }
 
-module.exports = initDatabase;
+module.exports = {
+    initDatabase: initDatabase,
+    connection: mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+    }),
+};
