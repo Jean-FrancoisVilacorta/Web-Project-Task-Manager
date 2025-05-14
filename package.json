@@ -10,8 +10,10 @@
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.4.2",
     "mysql2": "^3.14.1"
   },

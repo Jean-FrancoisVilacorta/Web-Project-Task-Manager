@@ -9,7 +9,7 @@
         <div class="wrapper">
             <section class="LOGIN">
                 <h1>LOGIN</h1>
-                <form id="loginForm">
+                <form id="loginForm" method="POST">
                     <div class="inputbox">
                         <ion-icon name="mail-outline"></ion-icon>
                         <input type="email" id="email" name="email" required />
@@ -24,15 +24,15 @@
                         <button type="submit" class="login-btn">Se connecter</button>
                     </div>
                     <div class="register-link">
-                        <p>Pas encore de compte? <a href="./GET/register.html">S'inscrire</a></p>
+                        <p>Pas encore de compte? <a href="/register">S'inscrire</a></p>
                     </div>
                 </form>
                 <div id="error-message" class="error-message"></div>
             </section>
         </div>
     </div>
-    
-    <script>
+
+<!--     <script>
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -61,8 +61,8 @@
                 console.error('Error:', error);
                 errorElement.textContent = 'Erreur de connexion au serveur';
             }
-        });
-    </script>
+         });
+    </script> -->
     
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

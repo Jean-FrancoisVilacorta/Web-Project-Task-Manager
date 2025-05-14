@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { connection: db } = require('../../config/db');
 
 const post_login = (req, res) => {
+    console.log(req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
