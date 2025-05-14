@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LOGIN EPITODO</title>
+    <link rel="stylesheet" href="./STYLE/style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <section class="LOGIN">
+                <h1>LOGIN</h1>
+                <form id="loginForm">
+                    <div class="inputbox">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <input type="email" id="email" name="email" required />
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" id="password" name="password" required />
+                        <label for="password">Mot de passe</label>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="login-btn">Se connecter</button>
+                    </div>
+                    <div class="register-link">
+                        <p>Pas encore de compte? <a href="./GET/register.html">S'inscrire</a></p>
+                    </div>
+                </form>
+                <div id="error-message" class="error-message"></div>
+            </section>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error-message');
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    window.location.href = '/todos';
+                } else {
+                    errorElement.textContent = data.msg || 'Erreur lors de la connexion';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorElement.textContent = 'Erreur de connexion au serveur';
+            }
+        });
+    </script>
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
