@@ -1,6 +1,7 @@
 const mysql = require("mysql2");
 require("dotenv").config();
 
+const { setConnection } = require('./const_db.js');
 
 function create_logs(callback, connection) {
     const createLogsTable = `
@@ -41,25 +42,35 @@ function create_todo(callback, connection) {
 }
 
 function initDatabase(callback) {
-  const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-  });
+    const connection = mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+    });
 
-  connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``, (err) => {
-    if (err){
-        console.log("create_error\n");
-        return callback(err);
-    }
-    connection.changeUser({ database: process.env.DB_NAME }, (err) => {
-        if (err){
+    connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``, (err) => {
+        if (err) {
+            console.log("[ERROR] - Creating the DataBase");
             return callback(err);
         }
-        create_logs(callback, connection);
-        create_todo(callback, connection);
+        connection.changeUser({ database: process.env.DB_NAME }, (err) => {
+            if (err) {
+                console.log("[ERROR] - Changing the User");
+                return callback(err);
+            }
+            create_logs((err) => {
+            if (err) {
+                console.log("[ERROR] - Creating the Logs");
+                return callback(err);
+            }
+            create_todo((err) => {
+                if (err) return callback(err);
+                    setConnection(connection);
+                    callback(null, connection);
+                }, connection);
+            }, connection);
+        });
     });
-  });
 }
 
 module.exports = {
