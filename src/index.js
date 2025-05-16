@@ -12,12 +12,14 @@ const post_register = require("./routes/register/post_register.js");
 const login = require("./routes/login/login.js");
 const post_login = require("./routes/login/post_login.js");
 const auth = require("./middleware/auth.js");
+const userRoutes = require("./routes/user/user.js");
 
 const view_todo = require("./routes/todos/todos.js");
 const view_all_todo = view_todo.view_all_todo;
 const view_todo_id  = view_todo.view_todo_id;
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 initDatabase((err, db) => {
     if (err) {
@@ -53,6 +55,9 @@ initDatabase((err, db) => {
     app.get('/todos', (req, res) => {
         view_all_todo(res);
     });
+
+    app.use("/", userRoutes);
+
     app.listen(port, () => {
         console.log(`server: http://localhost:${port}`);
     });
