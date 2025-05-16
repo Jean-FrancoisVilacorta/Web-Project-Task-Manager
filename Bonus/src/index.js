@@ -32,8 +32,8 @@ initDatabase((err, db) => {
         process.exit(84);
     }
 
-    app.get("/", (req, res) => {  
-        res.send("Epytodo");
+    app.get("/", (req, res) => {
+        res.sendFile(path.join(__dirname, "/views/home_page.html"));
     });
 
     app.get('/register', (req, res) => {
