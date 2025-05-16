@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>All todos</title>
+    </head>
+    <body>
+        <form action="create" method="post">
+            <h2>New todo</h2>
+            <a>Title : </a>
+            <input type="text" id="new_title" name="new_title" required><br>
+            <a>Description : </a>
+            <input type="text" id="new_desc" name="new_desc" required><br>
+            <a>Due_time :</a>
+            <input type="date" id="new_time" name="new_time" required><br>
+            <button type="submit">Create todo</button>
+        </form>
+        <h2> All Todos :</h1>
+        <ul>
+            <% todo.forEach(item => { %>
+                <li>
+                    <strong>
+                    <a href="/todos/<%= item.id%>"><%= item.title%></a>
+                    </strong>
+                </li>
+            <% })%>
+        </ul>
+    </body>
+
+</html>
