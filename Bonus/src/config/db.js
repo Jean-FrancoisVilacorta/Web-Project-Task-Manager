@@ -34,52 +34,60 @@ const createTodoTable = `
         )`;
 connection.query(createTodoTable, (err) => {
     if (err) return callback(err);
-    console.log("PASS TABLE TO DO0");
+    console.log("PASS TABLE TO DO");
     callback(null, connection);
 });
 }
 
 function initDatabase(callback) {
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-});
+    const connection = mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+    });
 
-connection.query(
-    `CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``,
-    (err) => {
-    if (err) {
-        console.log("[ERROR] - Creating the DataBase");
-        return callback(err);
-    }
-    connection.changeUser({ database: process.env.DB_NAME }, (err) => {
+    connection.query(
+        `CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``,
+        (err) => {
         if (err) {
-        console.log("[ERROR] - Changing the User");
-        return callback(err);
-        }
-        create_user((err) => {
-        if (err) {
-            console.log("[ERROR] - Creating the user");
+            console.log("[ERROR] - Creating the DataBase");
             return callback(err);
         }
-        create_todo((err) => {
-            if (err) return callback(err);
-            setConnection(connection);
-            callback(null, connection);
-        }, connection);
-        }, connection);
+        connection.changeUser({ database: process.env.DB_NAME }, (err) => {
+            if (err) {
+            console.log("[ERROR] - Changing the User");
+            return callback(err);
+            }
+            create_user((err) => {
+            if (err) {
+                console.log("[ERROR] - Creating the user");
+                return callback(err);
+            }
+            create_todo((err) => {
+                if (err) return callback(err);
+                setConnection(connection);
+                callback(null, connection);
+            }, connection);
+            }, connection);
+        });
+        }
+    );
+    console.log("connecter to mysql");
+}
+
+function connect_db(){
+    initDatabase((err) => {
+        if (err) return err;
     });
-    }
-);
+    return mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+    });
 }
 
 module.exports = {
 initDatabase: initDatabase,
-connection: mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-}),
+connection: connect_db(),
 };

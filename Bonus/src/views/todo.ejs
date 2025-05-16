@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Détail Todo</title>
+</head>
+<body>
+  <h1>Détails du ToDo</h1>
+    <form action="/todos/<%= todo.id %>" name="__method" method="PUT">
+      <a href="../todos/">ALL TODOS</a>
+      <p><strong>ID :</strong> <%= todo.id %></p>
+      <input type="text" name="todo_title" value="<%= todo.title %>" required><br>
+      <input type="text" name="todo_desc" value="<%= todo.description%>" required><br>
+      <input type="date" value="<%= todo.created_at.toISOString().slice(0, 10) %>" readonly><br>
+      <input type="date" name="due_time" value="<%= todo.due_time.toISOString().slice(0, 10) %>"><br>
+      <select id="status" name="status" required>
+        <option value="not started" <%= todo.status === 'not started' ? 'selected' : '' %>>not started</option>
+        <option value="to do" <%= todo.status === 'to do' ? 'selected' : '' %>>to do</option>
+        <option value="in progress" <%= todo.status === 'in progress' ? 'selected' : '' %>>in progress</option>
+        <option value="done" <%= todo.status === 'done' ? 'selected' : '' %>>done</option>
+      </select><br>
+
+      <button type="submit">update todo</button>
+    </form>
+    <form action="/todos/<%= todo.id %>" method="post">
+      <button type="submit" onclick="return confirm('do you want to delte <%= todo.title %>')">Delete todo</button>
+    </form>
+</body>
+</html>

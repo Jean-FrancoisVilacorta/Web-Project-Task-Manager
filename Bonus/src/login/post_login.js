@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { connection: db } = require("../../config/db");
-const token_const = require("../../config/const_token");
 
 const post_login = (req, res) => {
   console.log(req.body);
@@ -44,10 +43,6 @@ const post_login = (req, res) => {
             console.error("JWT error:", err);
             return res.status(500).json({ msg: "Internal server error" });
           }
-          token_const.token = token;
-          const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
-          token_const.tokenValue = jwt.verify(tokenValue, process.env.SECRET);
-          res.redirect("/todos")
           res.status(200).json({ token });
         }
       );

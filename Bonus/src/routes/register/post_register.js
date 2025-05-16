@@ -42,6 +42,8 @@ module.exports = async (req, res) => {
         }
         token = jwt.sign({ id: result.insertId, email }, process.env.JWT_SECRET || process.env.SECRET, { expiresIn: '24h' });
         const_token.token = token;
+        const tokenValue = token.startsWith('Bearer ') ? token.slice(7) : token;
+        const_token.tokenValue = jwt.verify(tokenValue, process.env.SECRET);
         res.status(201).json({ token });
       }
     );

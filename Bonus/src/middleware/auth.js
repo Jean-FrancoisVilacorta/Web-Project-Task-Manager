@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+const token_const = require("../config/const_token");
 
 const auth = (req, res, next) => {
-    const token = req.header('Authorization');
+    const token = token_const.token;
 
     if (!token) {
         return res.status(401).json({ msg: "No token, authorization denied" });

@@ -12,45 +12,34 @@ const connect = mysql.createConnection({
 
 
 function todo_create(req, res) {
-    const {title, description, due_time, status, user_id} = req.body;
-    if (!title || !description || !due_time || !status || !user_id)
+    const {new_title, new_desc, new_time} = req.body;
+    if (!new_time || !new_desc || !new_time)
         return res.status(400).send("Missing fields");
 
-    const create_todo = `INSERT INTO todo (title, description, created_at, due_time, status, user_id)
-                        VALUES (\'${title}\',
-                                \'${description}\',
+    const create_todo = `INSERT INTO todo (title, description, created_at, due_time, user_id)
+                        VALUES (\'${new_title}\',
+                                \'${new_desc}\',
                                 NOW(),
-                                \'${due_time}\',
-                                \'${status}\',
-                                (SELECT id FROM user WHERE id = ${user_id}))`;
+                                \'${new_time}\',
+                                (SELECT id FROM user WHERE id = ${token_const.tokenValue.id}))`;
 
     connect.query(create_todo, (err) => {
         if (err){
             console.log("Creation failed", err);
             return res.status(500).json({msg : "Error when creating"})
         }
-        const select = `SELECT * FROM todo
-                WHERE title = \'${title}\'
-                AND description = \'${description}\'
-                AND due_time = \'${due_time}\'`; 
-        connect.query(select, (err, result) => {
-            if (err){
-                console.log("Creation failed", err);
-                return res.status(500).json({msg : "Error when creating"})
-            }
-            res.send(result[0]);
-        });
     })
+    res.redirect('/todos');
 }
 
 function todo_update(id, req, res) {
-    const {title, description, due_time, status} = req.body;
-    if (!title || !description || !due_time || !status)
+    const {todo_title, todo_desc, due_time, status} = req.body;
+    if (!todo_title || !todo_desc || !due_time || !status)
         return res.status(400).send("Missing fields");
     const update = `UPDATE todo
         SET
-        title = \'${title}\',
-        description = \'${description}\',
+        title = \'${todo_title}\',
+        description = \'${todo_desc}\',
         due_time = \'${due_time}\',
         status = \'${status}\'
         WHERE id = ${id}`;
@@ -59,13 +48,6 @@ function todo_update(id, req, res) {
             console.log("Update database Error : ", err);
             return res.status(500).json({msg : "Error Update"});
         }
-        connect.query(`SELECT * FROM todo WHERE id = ${id}`, (err, result) => {
-            if (err){
-                console.log("Update database Error : ", err);
-                return res.status(500).json({msg : "Error Update"});
-            }
-            res.send(result);
-        });
     });
 }
 
@@ -78,7 +60,7 @@ function todo_delete(id, res) {
             console.log("Delete database Error : ", err);
             return res.status(500).json({msg : "Error Delete"});
         }
-        res.json({ msg : `Successfully deleted record number : ${id}`});
+        res.redirect(`/todos`)
     });
 }
 

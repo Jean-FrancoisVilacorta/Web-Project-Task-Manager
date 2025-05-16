@@ -1,3 +1,4 @@
 module.exports = {
-    token: null
+    token: null,
+    tokenValue: null
 };

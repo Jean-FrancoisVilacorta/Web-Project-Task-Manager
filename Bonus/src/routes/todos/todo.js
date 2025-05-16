@@ -27,18 +27,22 @@ function view_todo(id, res) {
             return res.status(404).send('Todo not found');
         }
         console.log(result);
-        res.send(result);
+        res.render('todo', { todo : result[0] });
     });
 }
 
 function view_all_todo(res) {
-    const query = `SELECT * FROM todo`;
+    if (!token_const || !token_const.token)
+        return res.redirect("/login");
+    console.log("toke = ", token_const.tokenValue);
+    const query = `SELECT * FROM todo
+            WHERE user_id = ${token_const.tokenValue.id}`;
     connect.query(query, function(err, result) {
         if (err) {
             console.error(`Error showing todo table:`, err);
             return err;
         }
-        res.send(result);
+        res.render('todo_list', {todo : result});
     });
 }
 

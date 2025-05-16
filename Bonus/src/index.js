@@ -14,13 +14,17 @@ const post_login = require("./routes/login/post_login.js");
 const auth = require("./middleware/auth.js");
 const userRoutes = require("./routes/user/user.js");
 
-const view_todo = require("./routes/todos/todos.js");
+const view_todo = require("./routes/todos/todo.js");
+const post_todo = require("./routes/todos/post_todos.js");
+
 const view_all_todo = view_todo.view_all_todo;
 const view_todo_id  = view_todo.view_todo_id;
 
-app.use(express.static(path.join(__dirname, '..', 'front', 'build')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, "./views"));
 
 initDatabase((err, db) => {
     if (err) {
@@ -48,18 +52,35 @@ initDatabase((err, db) => {
         post_login(req, res);
     });
 
+    app.get('/todos', (req, res) => {
+        view_all_todo(res);
+    });
+
+    app.post('/todos', (req, res) => {
+        post_todo.todo_create(req, res);
+    });
+
     app.get('/todos/:id', (req, res) => {
         let id = req.params.id;
         view_todo_id(id, res);
     });
 
-    app.get('/todos', (req, res) => {
-        view_all_todo(res);
+    app.put('/todos/:id', (req, res) => {
+        const id = req.params.id;
+        console.log("Update");
+        post_todo.todo_update(id, req, res);
+    })
+
+    app.post('/todos/:id', (req, res) => {
+        const id = req.params.id;
+        post_todo.todo_delete(id, res);
+    })
+
+    app.post('/todos/create', (req, res) => {
+        post_todo.todo_create(req, res);
     });
 
-    app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'front', 'build', 'index.html'));
-    });
+    app.use("/", userRoutes);
 
     app.listen(port, () => {
         console.log(`server: http://localhost:${port}`);
