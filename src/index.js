@@ -52,28 +52,30 @@ initDatabase((err, db) => {
         post_login(req, res);
     });
 
-    app.get('/todos/:id', (req, res) => {
-        let id = req.params.id;
-        view_todo_id(id, res);
-    });
 
     app.get('/todos', (req, res) => {
         view_all_todo(res);
     });
 
-    app.post('/todos/:id/update', (req, res) => {
+    app.post('/todos', (req, res) => {
+        post_todo.todo_create(req, res);
+    });
+
+    app.get('/todos/:id', (req, res) => {
+        let id = req.params.id;
+        view_todo_id(id, res);
+    });
+
+    app.put('/todos/:id', (req, res) => {
         const id = req.params.id;
+        console.log("Update");
         post_todo.todo_update(id, req, res);
     })
 
-    app.post('/todos/:id/delete', (req, res) => {
+    app.post('/todos/:id', (req, res) => {
         const id = req.params.id;
         post_todo.todo_delete(id, res);
     })
-
-    app.post('/todos/create', (req, res) => {
-        post_todo.todo_create(req, res);
-    });
 
     app.use("/", userRoutes);
 
