@@ -1,0 +1,109 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgb(22, 126, 218);
+}
+
+.container {
+    background-color: rgb(97, 14, 52);
+    padding: 2rem;
+    border-radius: 10px;
+    color: #fff;
+    width: 350px;
+}
+
+h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+form {
+    margin: 2rem 0;
+}
+
+.inputbox {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.inputbox ion-icon {
+    position: absolute;
+    top: 15px;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.inputbox input {
+    width: 100%;
+    height: 50px;
+    padding: 0 35px;
+    border: none;
+    outline: none;
+    border-bottom: #fff solid 2px;
+    background-color: transparent;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.inputbox label {
+    position: absolute;
+    top: 15px;
+    left: 35px;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.inputbox input:focus ~ label,
+.inputbox input:valid ~ label {
+    top: -10px;
+    font-size: 0.8rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.login-btn {
+    width: 80%;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #fff;
+    color: rgb(97, 14, 52);
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+.register-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.register-link a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #ff6b6b;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
