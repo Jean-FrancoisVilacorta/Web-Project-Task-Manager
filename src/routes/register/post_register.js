@@ -1,6 +1,8 @@
-const { getConnection } = require("../../config/const_db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const { getConnection } = require("../../config/const_db");
+const const_token = require("../../config/const_token")
 
 module.exports = async (req, res) => {
   const connection = getConnection();
@@ -38,7 +40,8 @@ module.exports = async (req, res) => {
             .status(500)
             .json({ msg: "[ERROR]: Connecting with the data Base" });
         }
-        const token = "Token";
+        token = jwt.sign({ id: result.insertId, email }, process.env.JWT_SECRET || process.env.SECRET, { expiresIn: '24h' });
+        const_token.token = token;
         res.status(201).json({ token });
       }
     );
